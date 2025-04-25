@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Input
+﻿namespace Input
 {
     public enum ButtonState
     {

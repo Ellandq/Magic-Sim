@@ -3,32 +3,11 @@ using UnityEngine;
 
 namespace Input
 {
-    public class InputManager : MonoBehaviour
+    public class InputManager : ManagerBase<InputManager>
     {
-        // Manager Instance
-        private static InputManager _instance;
-
         [Header("Input Handles")] 
-        [SerializeField] private KeyboardInput _keyboardInput;
-        [SerializeField] private MouseInput _mouseInput;
-
-        private void Awake()
-        {
-            if (!_instance)
-            {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        public static InputManager getInstance()
-        {
-            return _instance;
-        }
+        [SerializeField] private KeyboardInput keyboardInput;
+        [SerializeField] private MouseInput mouseInput;
         
         public static readonly List<(KeyCode button, string action)> KeyboardButtons = new()
         {
