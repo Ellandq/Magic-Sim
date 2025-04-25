@@ -13,7 +13,7 @@ namespace Input
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 
             UpdateButtonStateDictionary();
-            UpdateEventDictionaries();
+            UpdateEventDictionaries(InputManager.MouseButtons);
         }
         
         private void Update ()

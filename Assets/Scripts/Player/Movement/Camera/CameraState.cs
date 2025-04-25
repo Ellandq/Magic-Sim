@@ -3,7 +3,7 @@
     public enum CameraState
     {
         ActiveAndEnabled,
-        Active,
-        Inactive
+        Enabled,
+        Disabled
     }
 }

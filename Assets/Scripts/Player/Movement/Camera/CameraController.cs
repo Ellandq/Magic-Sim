@@ -5,12 +5,20 @@ namespace Player.Movement.Camera
 {
     public abstract class CameraController : MonoBehaviour
     {
+        [Header("Object References")] 
+        [SerializeField] protected UnityEngine.Camera camera;
+        
         [Header("Misc.")]
-        protected CameraState CameraState = CameraState.Inactive;
+        protected CameraState CameraState = CameraState.Disabled;
         protected float Sensitivity;
-        protected float XRotation; 
+        protected float XRotation;
+        
+        [Header("State Switch Actions")]
+        protected Action OnActivate;
+        protected Action OnEnable;
+        protected Action OnDisable;
 
-        public void SetUpCamera(CameraState state, float sensitivity)
+        public virtual void SetUpCamera(CameraState state, float sensitivity)
         {
             SetCameraState(state);
             Sensitivity = sensitivity;
@@ -23,10 +31,13 @@ namespace Player.Movement.Camera
             switch (CameraState)
             {
                 case CameraState.ActiveAndEnabled:
+                    OnActivate?.Invoke();
                     break;
-                case CameraState.Active:
+                case CameraState.Enabled:
+                    OnEnable?.Invoke();
                     break;
-                case CameraState.Inactive:
+                case CameraState.Disabled:
+                    OnDisable?.Invoke();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

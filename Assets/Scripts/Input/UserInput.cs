@@ -22,11 +22,11 @@ namespace Input
             }
         }
 
-        protected void UpdateEventDictionaries () 
+        protected void UpdateEventDictionaries (List<(T button, string action)> buttonActionList) 
         {
             OnInputAction = new Dictionary<string, Action<ButtonState>>();
 
-            foreach (var tuple in InputManager.MouseButtons){
+            foreach (var tuple in buttonActionList){
                 OnInputAction.Add(tuple.action, (state) => {});
             }
         }
@@ -38,5 +38,7 @@ namespace Input
         public bool GetButtonState (string action){
             return ButtonStates[ButtonAssignment[action]];
         }
+        
+        public void AddListenerOnInputAction (Action<ButtonState> actionToAdd, string key) { OnInputAction[key] += actionToAdd; }
     }
 }

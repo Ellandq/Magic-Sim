@@ -1,29 +1,50 @@
-using System.Collections.Generic;
+using System.Collections;
 using GameStates;
+using Unity.Collections;
+using UnityEngine;
 
 public class GameManager : ManagerBase<GameManager>
 {
-    private (GameStateStatus status, IGameState state) _currentState;
-    
+    private IGameState _currentState;
+
+    #if UNITY_EDITOR
+        [Header("State Information")]
+        [SerializeField, ReadOnly] private string currentState;
+        [SerializeField, ReadOnly] private GameStateStatus stateStatus;
+    #endif
+
     private void Start()
     {
-        // ChangeState(new MainMenuState(this));
+        // TODO Rework this to use main menu as the default or work based on the given scene
+        ChangeState(new PlayingState());
     }
 
     private void Update()
     {
-        _currentState.state?.Update();
+        #if UNITY_EDITOR
+            currentState = _currentState.Name;
+            stateStatus = _currentState.Status;
+        #endif
+        _currentState?.Update();
     }
 
-    public void ChangeState(IGameState newState)
+    public void ChangeState(IGameState nextState)
     {
-        _currentState.state?.Exit();
-        _currentState.state = newState;
-        _currentState.state?.Enter();
+        StartCoroutine(TransitionTo(nextState));
     }
 
-    // Optional: expose states for external use
-    // public void StartGame() => ChangeState(new PlayingState(this));
-    // public void PauseGame() => ChangeState(new PauseState(this));
-    // public void ReturnToMenu() => ChangeState(new MainMenuState(this));
+    private IEnumerator TransitionTo(IGameState nextState)
+    {
+        if (_currentState != null)
+        {
+            _currentState.Exit();
+            while (!_currentState.CanExit())
+            {
+                yield return null;
+            }
+        }
+
+        _currentState = nextState;
+        _currentState.Enter();
+    }
 }

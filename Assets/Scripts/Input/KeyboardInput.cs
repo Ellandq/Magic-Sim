@@ -14,7 +14,7 @@ namespace Input
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 
             UpdateButtonStateDictionary();
-            UpdateEventDictionaries();
+            UpdateEventDictionaries(InputManager.KeyboardButtons);
         }
         
         private void Update ()

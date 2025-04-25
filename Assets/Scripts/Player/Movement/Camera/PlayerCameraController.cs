@@ -46,10 +46,11 @@ namespace Player.Movement.Camera
             activeCamera = cameraType;
             _cameras.Keys.ToList().ForEach(type =>
             {
-                var state = type == cameraType ? CameraState.Active : CameraState.Inactive;
+                var state = type == cameraType ? CameraState.Enabled : CameraState.Disabled;
                 var sensitivity = _sensitivities[type];
                 _cameras[type].SetUpCamera(state, sensitivity);
             });
+            
         }
 
         #endregion
@@ -59,8 +60,13 @@ namespace Player.Movement.Camera
             activeCamera = cameraType;
             foreach (var kvp in _cameras)
             {
-                kvp.Value.SetCameraState(kvp.Key == cameraType ? CameraState.Active : CameraState.Inactive);
+                kvp.Value.SetCameraState(kvp.Key == cameraType ? CameraState.Enabled : CameraState.Disabled);
             }
+        }
+
+        public void EnableCurrentCamera()
+        {
+            _cameras[activeCamera].SetCameraState(CameraState.ActiveAndEnabled);
         }
         
         private void LateUpdate()

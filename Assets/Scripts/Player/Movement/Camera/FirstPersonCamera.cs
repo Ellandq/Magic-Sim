@@ -7,7 +7,32 @@ namespace Player.Movement.Camera
         [SerializeField] private Rigidbody playerBody;
         [SerializeField] private Transform cameraRoot;
         [SerializeField] private Transform cameraFollowObject;
-        
+
+        public override void SetUpCamera(CameraState state, float sensitivity)
+        {
+            base.SetUpCamera(state, sensitivity);
+            
+            camera.cullingMask &= ~(1 << LayerMask.NameToLayer("FirstPerson"));
+
+            OnActivate = () =>
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            };
+            
+            OnEnable = () =>
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = true;
+            };
+            
+            OnDisable = () =>
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            };
+        }
+
         public override void Move()
         {
             transform.position = cameraRoot.position;
