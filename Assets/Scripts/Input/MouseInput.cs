@@ -5,15 +5,8 @@ using UnityEngine;
 
 namespace Input
 {
-    public class MouseInput : MonoBehaviour
+    public class MouseInput : UserInput<int>
     {
-        [Header("Events")] 
-        private Dictionary<string, Action<ButtonState>> _onInputAction;
-
-        [Header("Key Information")] 
-        private Dictionary<string, int> _buttonAssignment;
-        private Dictionary<int, bool> _buttonStates;
-
         private void Awake()
         {
             _buttonStates = new Dictionary<int, bool>();
@@ -44,27 +37,5 @@ namespace Input
                 }
             }
         } 
-        
-        private void UpdateButtonStateDictionary () 
-        {
-            _buttonStates = new Dictionary<int, bool>();
-
-            foreach (var button in _buttonAssignment){
-                _buttonStates.Add(button.Value, false);
-            }
-        }
-
-        private void UpdateEventDictionaries () 
-        {
-            _onInputAction = new Dictionary<string, Action<ButtonState>>();
-
-            foreach (var tuple in InputManager.MouseButtons){
-                _onInputAction.Add(tuple.action, (state) => {});
-            }
-        }
-        
-        public bool GetButtonState (int key){
-            return _buttonStates[key];
-        }
     }
 }
