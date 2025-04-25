@@ -9,8 +9,8 @@ namespace Input
     {
         private void Awake()
         {
-            _buttonStates = new Dictionary<int, bool>();
-            _buttonAssignment = InputManager.MouseButtons
+            ButtonStates = new Dictionary<int, bool>();
+            ButtonAssignment = InputManager.MouseButtons
                 .Select(n => new KeyValuePair<string, int>(n.action, n.button))
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 
@@ -20,19 +20,19 @@ namespace Input
         
         private void Update ()
         {
-            foreach (var button in _buttonAssignment)
+            foreach (var button in ButtonAssignment)
             {
-                var previousState = _buttonStates[button.Value];
+                var previousState = ButtonStates[button.Value];
 
-                _buttonStates[button.Value] = UnityEngine.Input.GetMouseButton(button.Value);
+                ButtonStates[button.Value] = UnityEngine.Input.GetMouseButton(button.Value);
 
-                switch (_buttonStates[button.Value])
+                switch (ButtonStates[button.Value])
                 {
                     case true when !previousState:
-                        _onInputAction[button.Key]?.Invoke(ButtonState.Down);
+                        OnInputAction[button.Key]?.Invoke(ButtonState.Down);
                         break;
                     case false when previousState:
-                        _onInputAction[button.Key]?.Invoke(ButtonState.Up);
+                        OnInputAction[button.Key]?.Invoke(ButtonState.Up);
                         break;
                 }
             }
